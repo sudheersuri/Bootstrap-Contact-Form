@@ -70,6 +70,21 @@ $(document).ready(function () {
       errormessage +=
         "Invalid Text.Message must contain a minimum of 1 character upto maximum of 500 characters";
     }
-    $("#errors").html(errormessage);
+    if (errormessage == "") {
+      //error message is empty so post the data
+      $.post("server.php", { name, email, phone, text }, function (data) {
+        let resp = JSON.parse(data);
+        if (resp.status === 200) {
+          let msg = resp.message;
+          $("#response").html(msg);
+        } else {
+          let msg = resp.error;
+          $("#response").html(msg);
+        }
+      });
+    } else {
+      //display error messages.
+      $("#errors").html(errormessage);
+    }
   });
 });
